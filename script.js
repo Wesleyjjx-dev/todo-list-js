@@ -1,17 +1,15 @@
-const input= document.querySelector('input');
-const button= document.querySelector('button');
-const list= document.querySelector('ul');
+const input = document.getElementById("taskInput");
+const button = document.getElementById("addBtn");
+const list = document.getElementById("taskList");
 
-button.addEventListener('click',function()){
-    const text = input.value;
+button.addEventListener("click", () => {
+  const text = input.value;
 
-    if(text=== ''){
-        return;
-    }
+  if (text === "") return;
 
-  const li= document.createElement('li');
-  li.textContent= text;
+  const li = document.createElement("li");
+  li.textContent = text;
 
   list.appendChild(li);
-  input.value= '';
+  input.value = "";
 });
