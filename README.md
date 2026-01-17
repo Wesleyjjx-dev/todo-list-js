@@ -8,4 +8,4 @@ Projeto simples de To-Do List feito com HTML, CSS e JavaScript puro.
 - Interface simples e responsiva
 
 ## Demo
-👉 https://wesleyjxx-dev.github.io/todo-list-js/
+👉 https://wesleyjjx-dev.github.io/todo-list-js/
