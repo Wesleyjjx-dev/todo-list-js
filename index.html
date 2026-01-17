@@ -1,26 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charsed= "UTF-8">
-    <tittle>To-do List</tittle>
-    <meta name= "viewport" content="width=device-width, initial-scale=1.0>
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8">
+  <title>To-do List</title>
+</head>
+<body>
 
-      <h1>To-do List</h1>
+  <h1>To-do List</h1>
 
-    <div>
-      <input 
-      type= "text" 
-      placeholder = "digite uma tarefa"
-      style="width:200px; border:1px solid black; padding: 5px;">
-      <button>Adicionar</button>
-    </div>
+  <input 
+    type="text" 
+    id="taskInput"
+    placeholder="Digite uma tarefa"
+    style="width:300px; padding:8px; border:1px solid #000;"
+  >
 
-    <ul>
-      
-    </ul>
+  <button id="addBtn">Adicionar</button>
 
-    <script src= "script.js"></script>
-  </body>
+  <ul id="taskList"></ul>
+
+  <script src="script.js"></script>
+</body>
 </html>
