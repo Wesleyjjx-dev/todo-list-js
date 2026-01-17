@@ -9,7 +9,16 @@ button.addEventListener("click", () => {
 
   const li = document.createElement("li");
   li.textContent = text;
+  li.addEventListener("click", () => {
+  li.style.textDecoration = "line-through";
+});
 
   list.appendChild(li);
   input.value = "";
+});
+
+input.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    button.click();
+  }
 });
