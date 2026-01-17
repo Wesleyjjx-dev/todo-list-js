@@ -1,2 +1,11 @@
-# To-do List
-Aplicação simples de lista de tarefas desenvolvida com HTML, CSS e JavaScript puro.
+# To-Do List em JavaScript
+
+Projeto simples de To-Do List feito com HTML, CSS e JavaScript puro.
+
+## Funcionalidades
+- Adicionar tarefas
+- Marcar tarefas como concluídas
+- Interface simples e responsiva
+
+## Demo
+👉 https://Wesleyjxx-dev.github.io/todo-list-js/
