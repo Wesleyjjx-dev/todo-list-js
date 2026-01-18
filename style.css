@@ -17,3 +17,8 @@ li {
   cursor: pointer;
   margin-top: 8px;
 }
+
+.done {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
