@@ -2,23 +2,25 @@ const input = document.getElementById("taskInput");
 const button = document.getElementById("addBtn");
 const list = document.getElementById("taskList");
 
-button.addEventListener("click", () => {
-  const text = input.value;
-
+function addTask() {
+  const text = input.value.trim();
   if (text === "") return;
 
   const li = document.createElement("li");
   li.textContent = text;
+
   li.addEventListener("click", () => {
-  li.style.textDecoration = "line-through";
-});
+    li.classList.toggle("done");
+  });
 
   list.appendChild(li);
   input.value = "";
-});
+}
+
+button.addEventListener("click", addTask);
 
 input.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
-    button.click();
+    addTask();
   }
 });
