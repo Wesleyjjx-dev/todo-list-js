@@ -2,7 +2,13 @@ const input = document.getElementById("taskInput");
 const button = document.getElementById("addBtn");
 const list = document.getElementById("taskList");
 
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+// carrega tarefas salvas
+function loadTasks() {
+  const saved = localStorage.getItem("tasks");
+  return saved ? JSON.parse(saved) : [];
+}
+
+let tasks = loadTasks();
 
 function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -31,7 +37,7 @@ function renderTasks() {
 
 function addTask() {
   const text = input.value.trim();
-  if (text === "") return;
+  if (!text) return;
 
   tasks.push({ text, done: false });
   saveTasks();
@@ -41,11 +47,11 @@ function addTask() {
 
 button.addEventListener("click", addTask);
 
-input.addEventListener("keypress", (e) => {
+input.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     addTask();
   }
 });
 
-// carrega tarefas ao abrir a página
+// renderiza ao abrir
 renderTasks();
