@@ -110,7 +110,7 @@ li {
   opacity: 0;
   transform: translateY(-5px);
   animation: fadeIn 0.3s ease forwards;
-  transition: all 0.3s ease; /* Adiciona transição */
+  transition: all 0.3s ease; /* aqui garantimos a transição */
 }
 
 li.completed {
@@ -147,6 +147,6 @@ li button:hover {
 
 .removing {
   opacity: 0;
-  transform: translateX(20px);
-  transition: all 0.3s ease;
+  transform: translateX(100%) rotate(5deg); /* desliza para a direita + pequena rotação */
+  transition: all 0.3s ease; /* aplica transição para transform e opacity */
 }
