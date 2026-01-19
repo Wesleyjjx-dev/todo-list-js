@@ -74,21 +74,22 @@ function renderTasks() {
       });
     });
 
-    // Botão remover tarefa com animação
+    // Botão remover tarefa com animação suave
     const removeBtn = document.createElement("button");
     removeBtn.textContent = "❌";
     removeBtn.addEventListener("click", e => {
       e.stopPropagation();
-
       const confirmar = confirm(`Deseja remover a tarefa:\n"${task.text}" ?`);
       if(!confirmar) return;
 
       li.classList.add("removing"); // aplica animação
-      setTimeout(() => {
+
+      // Remove do array só depois da animação
+      li.addEventListener("transitionend", () => {
         tasks = tasks.filter(t => t !== task);
         saveTasks();
         renderTasks();
-      }, 300); // espera animação terminar antes de remover
+      }, { once: true }); // garante que ouve apenas 1 vez
     });
     li.appendChild(removeBtn);
 
