@@ -1,3 +1,4 @@
+// Elementos do DOM
 const taskInput = document.getElementById("taskInput");
 const addBtn = document.getElementById("addBtn");
 const taskList = document.getElementById("taskList");
@@ -8,6 +9,7 @@ const filterPending = document.getElementById("filterPending");
 const filterCompleted = document.getElementById("filterCompleted");
 const emptyMessage = document.getElementById("emptyMessage");
 
+// Lista de tarefas
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 let currentFilter = "all"; // all | pending | completed
 
@@ -18,13 +20,16 @@ function saveTasks() {
 
 // Renderizar tarefas
 function renderTasks() {
+  // Mostrar/ocultar mensagem de lista vazia
   emptyMessage.style.display = tasks.length === 0 ? "block" : "none";
 
-  // contador de pendentes
+  // Atualizar contador de tarefas pendentes
   contador.textContent = tasks.filter(t => !t.completed).length;
 
+  // Limpar lista
   taskList.innerHTML = "";
 
+  // Aplicar filtro
   let filteredTasks = tasks;
   if (currentFilter === "pending") filteredTasks = tasks.filter(t => !t.completed);
   else if (currentFilter === "completed") filteredTasks = tasks.filter(t => t.completed);
@@ -33,8 +38,11 @@ function renderTasks() {
     const li = document.createElement("li");
     if(task.completed) li.classList.add("completed");
 
+    // Texto da tarefa
     const spanText = document.createElement("span");
     spanText.textContent = task.text;
+
+    // Marcar/desmarcar concluída ao clicar no texto
     spanText.addEventListener("click", () => {
       task.completed = !task.completed;
       saveTasks();
@@ -42,6 +50,31 @@ function renderTasks() {
     });
     li.appendChild(spanText);
 
+    // Editar tarefa com duplo clique
+    li.addEventListener("dblclick", () => {
+      const inputEdit = document.createElement("input");
+      inputEdit.type = "text";
+      inputEdit.value = task.text;
+      inputEdit.style.width = "80%";
+
+      li.innerHTML = "";
+      li.appendChild(inputEdit);
+      inputEdit.focus();
+
+      inputEdit.addEventListener("keydown", e => {
+        if (e.key === "Enter") {
+          const novoTexto = inputEdit.value.trim();
+          if(novoTexto !== "") {
+            task.text = novoTexto;
+            saveTasks();
+            renderTasks();
+          }
+        }
+        if (e.key === "Escape") renderTasks();
+      });
+    });
+
+    // Botão remover tarefa
     const removeBtn = document.createElement("button");
     removeBtn.textContent = "❌";
     removeBtn.addEventListener("click", e => {
@@ -52,15 +85,15 @@ function renderTasks() {
     });
     li.appendChild(removeBtn);
 
+    // Adicionar à lista
     taskList.appendChild(li);
   });
 }
 
-
 // Adicionar nova tarefa
 function addTask() {
   const texto = taskInput.value.trim();
-  if (texto === "") return;
+  if(texto === "") return;
 
   tasks.push({ text: texto, completed: false });
   taskInput.value = "";
@@ -70,8 +103,8 @@ function addTask() {
 
 // Eventos
 addBtn.addEventListener("click", addTask);
-taskInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") addTask();
+taskInput.addEventListener("keydown", e => {
+  if(e.key === "Enter") addTask();
 });
 
 // Tema claro/escuro
@@ -84,16 +117,14 @@ themeToggle.addEventListener("click", () => {
 
 // Restaurar tema salvo
 const savedTheme = localStorage.getItem("theme");
-if (savedTheme === "dark") {
+if(savedTheme === "dark") {
   document.body.classList.add("dark");
   themeToggle.textContent = "☀️ Modo claro";
 }
 
 // Filtros
 function setActiveFilter(botao) {
-  document.querySelectorAll(".filter-btn").forEach((btn) =>
-    btn.classList.remove("active")
-  );
+  document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
   botao.classList.add("active");
 }
 
@@ -112,6 +143,10 @@ filterCompleted.addEventListener("click", () => {
   setActiveFilter(filterCompleted);
   renderTasks();
 });
+
+// Inicial
+renderTasks();
+
 
 // Inicial
 renderTasks();
