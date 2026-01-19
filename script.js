@@ -44,11 +44,18 @@ function renderTasks() {
     removeBtn.textContent = "❌";
 
     removeBtn.addEventListener("click", (e) => {
-      e.stopPropagation(); // evita marcar como concluída
-      tasks.splice(index, 1);
-      saveTasks();
-      renderTasks();
-    });
+    e.stopPropagation();
+
+    const confirmar = confirm(
+    `Deseja remover a tarefa:\n"${task.text}" ?`
+    );
+
+    if (!confirmar) return;
+
+    tasks.splice(index, 1);
+    saveTasks();
+    renderTasks();
+  });
 
     li.appendChild(removeBtn);
     taskList.appendChild(li);
