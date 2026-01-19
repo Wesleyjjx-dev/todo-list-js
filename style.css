@@ -80,3 +80,20 @@ li button.remove {
   border: none;
   cursor: pointer;
 }
+
+.filtros {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 15px;
+}
+
+.filtros button {
+  flex: 1;
+  background: #e0e0e0;
+  color: #000;
+}
+
+.filtros button.ativo {
+  background: #007bff;
+  color: #fff;
+}
