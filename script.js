@@ -1,6 +1,6 @@
-const input = document.querySelector("input");
-const button = document.querySelector("button");
-const lista = document.querySelector("ul");
+const input = document.querySelector("#taskInput");
+const button = document.querySelector("#addBtn");
+const lista = document.querySelector("#taskList");
 const contador = document.querySelector("#contador");
 
 // Carrega tarefas do localStorage
