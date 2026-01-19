@@ -18,79 +18,44 @@ function saveTasks() {
 
 // Renderizar tarefas
 function renderTasks() {
-  // Mostrar/ocultar mensagem de lista vazia
   emptyMessage.style.display = tasks.length === 0 ? "block" : "none";
 
-  // Contador de tarefas pendentes
-  const pendentes = tasks.filter(t => !t.completed).length;
-  contador.textContent = pendentes;
+  // contador de pendentes
+  contador.textContent = tasks.filter(t => !t.completed).length;
 
   taskList.innerHTML = "";
 
-  // Filtrar tarefas
-  let filteredTasks = [];
-  if (currentFilter === "all") filteredTasks = tasks;
-  else if (currentFilter === "pending")
-    filteredTasks = tasks.filter(t => !t.completed);
-  else filteredTasks = tasks.filter(t => t.completed);
+  let filteredTasks = tasks;
+  if (currentFilter === "pending") filteredTasks = tasks.filter(t => !t.completed);
+  else if (currentFilter === "completed") filteredTasks = tasks.filter(t => t.completed);
 
-  filteredTasks.forEach((task) => {
+  filteredTasks.forEach(task => {
     const li = document.createElement("li");
-    if (task.completed) li.classList.add("completed");
+    if(task.completed) li.classList.add("completed");
 
     const spanText = document.createElement("span");
     spanText.textContent = task.text;
-
-    // Marcar/desmarcar tarefa clicando no texto
     spanText.addEventListener("click", () => {
       task.completed = !task.completed;
       saveTasks();
       renderTasks();
     });
-
     li.appendChild(spanText);
 
-    // Editar tarefa com duplo clique
-    li.addEventListener("dblclick", () => {
-      const inputEdit = document.createElement("input");
-      inputEdit.type = "text";
-      inputEdit.value = task.text;
-      inputEdit.style.width = "80%";
-
-      li.innerHTML = "";
-      li.appendChild(inputEdit);
-      inputEdit.focus();
-
-      inputEdit.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-          const novoTexto = inputEdit.value.trim();
-          if (novoTexto !== "") {
-            task.text = novoTexto;
-            saveTasks();
-            renderTasks();
-          }
-        }
-        if (e.key === "Escape") renderTasks();
-      });
-    });
-
-    // Botão remover tarefa
     const removeBtn = document.createElement("button");
     removeBtn.textContent = "❌";
-    removeBtn.addEventListener("click", (e) => {
+    removeBtn.addEventListener("click", e => {
       e.stopPropagation();
-      const confirmar = confirm(`Deseja remover a tarefa:\n"${task.text}" ?`);
-      if (!confirmar) return;
-
-      tasks = tasks.filter((t) => t !== task);
+      tasks = tasks.filter(t => t !== task);
       saveTasks();
       renderTasks();
     });
-
     li.appendChild(removeBtn);
+
     taskList.appendChild(li);
   });
 }
+
 
 // Adicionar nova tarefa
 function addTask() {
