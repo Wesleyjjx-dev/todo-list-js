@@ -1,65 +1,78 @@
 const input = document.querySelector("input");
 const button = document.querySelector("button");
-const ul = document.querySelector("ul");
-const counter = document.getElementById("counter");
+const lista = document.querySelector("ul");
+const contador = document.querySelector("#contador");
 
-// ⚠️ DECLARADO UMA ÚNICA VEZ
+// Carrega tarefas do localStorage
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
+// Salva tarefas
 function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
+// Renderiza tarefas na tela
 function renderTasks() {
-  ul.innerHTML = "";
+  lista.innerHTML = "";
 
   tasks.forEach((task, index) => {
     const li = document.createElement("li");
-    li.textContent = task.text;
+    li.textContent = task.texto;
 
-    if (task.done) {
-      li.style.textDecoration = "line-through";
+    if (task.concluida) {
+      li.classList.add("concluida");
     }
 
+    // Marcar / desmarcar como concluída
     li.addEventListener("click", () => {
-      tasks[index].done = !tasks[index].done;
+      task.concluida = !task.concluida;
       saveTasks();
       renderTasks();
     });
 
-    const removeBtn = document.createElement("button");
-    removeBtn.textContent = "❌";
-    removeBtn.style.marginLeft = "10px";
+    // Botão remover
+    const btnRemove = document.createElement("button");
+    btnRemove.textContent = "✖";
 
-    removeBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
+    btnRemove.addEventListener("click", (e) => {
+      e.stopPropagation(); // evita marcar como concluída
       tasks.splice(index, 1);
       saveTasks();
       renderTasks();
     });
 
-    li.appendChild(removeBtn);
-    ul.appendChild(li);
+    li.appendChild(btnRemove);
+    lista.appendChild(li);
   });
 
-  const pending = tasks.filter(task => !task.done).length;
-  counter.textContent = `Tarefas pendentes: ${pending}`;
+  // Atualiza contador
+  contador.textContent = tasks.filter(t => !t.concluida).length;
 }
 
-button.addEventListener("click", () => {
-  if (input.value.trim() === "") return;
+// Adiciona nova tarefa
+function addTask() {
+  const texto = input.value.trim();
+  if (texto === "") return;
 
-  tasks.push({ text: input.value, done: false });
+  tasks.push({
+    texto: texto,
+    concluida: false
+  });
+
   input.value = "";
   saveTasks();
   renderTasks();
-});
+}
 
+// Clique no botão
+button.addEventListener("click", addTask);
+
+// Enter no input
 input.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
-    button.click();
+    addTask();
   }
 });
 
-// ✅ render APENAS UMA VEZ no carregamento
+// Renderiza ao abrir a página
 renderTasks();
