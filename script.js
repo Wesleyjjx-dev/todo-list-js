@@ -11,25 +11,20 @@ const emptyMessage = document.getElementById("emptyMessage");
 
 // Lista de tarefas
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-let currentFilter = "all"; // all | pending | completed
+let currentFilter = "all";
 
-// Salvar tarefas no localStorage
+// Salvar tarefas
 function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
 // Renderizar tarefas
 function renderTasks() {
-  // Mostrar/ocultar mensagem de lista vazia
   emptyMessage.style.display = tasks.length === 0 ? "block" : "none";
-
-  // Atualizar contador de tarefas pendentes
   contador.textContent = tasks.filter(t => !t.completed).length;
 
-  // Limpar lista
   taskList.innerHTML = "";
 
-  // Aplicar filtro
   let filteredTasks = tasks;
   if (currentFilter === "pending") filteredTasks = tasks.filter(t => !t.completed);
   else if (currentFilter === "completed") filteredTasks = tasks.filter(t => t.completed);
@@ -38,11 +33,12 @@ function renderTasks() {
     const li = document.createElement("li");
     if(task.completed) li.classList.add("completed");
 
-    // Texto da tarefa
+    // Animação de entrada
+    li.classList.add("enter");
+    setTimeout(() => li.classList.remove("enter"), 10);
+
     const spanText = document.createElement("span");
     spanText.textContent = task.text;
-
-    // Marcar/desmarcar concluída ao clicar no texto
     spanText.addEventListener("click", () => {
       task.completed = !task.completed;
       saveTasks();
@@ -50,7 +46,7 @@ function renderTasks() {
     });
     li.appendChild(spanText);
 
-    // Editar tarefa com duplo clique
+    // Editar
     li.addEventListener("dblclick", () => {
       const inputEdit = document.createElement("input");
       inputEdit.type = "text";
@@ -62,7 +58,7 @@ function renderTasks() {
       inputEdit.focus();
 
       inputEdit.addEventListener("keydown", e => {
-        if (e.key === "Enter") {
+        if(e.key === "Enter") {
           const novoTexto = inputEdit.value.trim();
           if(novoTexto !== "") {
             task.text = novoTexto;
@@ -70,11 +66,11 @@ function renderTasks() {
             renderTasks();
           }
         }
-        if (e.key === "Escape") renderTasks();
+        if(e.key === "Escape") renderTasks();
       });
     });
 
-    // Botão remover tarefa com animação suave
+    // Remover com animação lateral
     const removeBtn = document.createElement("button");
     removeBtn.textContent = "❌";
     removeBtn.addEventListener("click", e => {
@@ -82,23 +78,20 @@ function renderTasks() {
       const confirmar = confirm(`Deseja remover a tarefa:\n"${task.text}" ?`);
       if(!confirmar) return;
 
-      li.classList.add("removing"); // aplica animação
-
-      // Remove do array só depois da animação
+      li.classList.add("removing");
       li.addEventListener("transitionend", () => {
         tasks = tasks.filter(t => t !== task);
         saveTasks();
         renderTasks();
-      }, { once: true }); // garante que ouve apenas 1 vez
+      }, { once: true });
     });
     li.appendChild(removeBtn);
 
-    // Adicionar à lista
     taskList.appendChild(li);
   });
 }
 
-// Adicionar nova tarefa
+// Adicionar tarefa
 function addTask() {
   const texto = taskInput.value.trim();
   if(texto === "") return;
@@ -123,7 +116,7 @@ themeToggle.addEventListener("click", () => {
   themeToggle.textContent = isDark ? "☀️ Modo claro" : "🌙 Modo escuro";
 });
 
-// Restaurar tema salvo
+// Restaurar tema
 const savedTheme = localStorage.getItem("theme");
 if(savedTheme === "dark") {
   document.body.classList.add("dark");
