@@ -2,7 +2,7 @@ const taskInput = document.getElementById("taskInput");
 const addBtn = document.getElementById("addBtn");
 const taskList = document.getElementById("taskList");
 const contador = document.getElementById("contador");
-
+const themeToggle = document.getElementById('themeToggle');
 const filterAll = document.getElementById("filterAll");
 const filterPending = document.getElementById("filterPending");
 const filterCompleted = document.getElementById("filterCompleted");
