@@ -1,11 +1,19 @@
-# To-Do List em JavaScript
+# To-do List
 
-Projeto simples de To-Do List feito com HTML, CSS e JavaScript puro.
+Aplicação web simples para gerenciamento de tarefas.
 
 ## Funcionalidades
 - Adicionar tarefas
-- Marcar tarefas como concluídas
-- Interface simples e responsiva
+- Marcar como concluída
+- Remover tarefas
+- Filtro por status
+- Persistência com LocalStorage
+- Layout responsivo
+
+## Tecnologias
+- HTML
+- CSS
+- JavaScript
 
 ## Demo
-👉 https://wesleyjjx-dev.github.io/todo-list-js/
+https://wesleyjjx-dev.github.io/todo-list-js
