@@ -15,6 +15,8 @@ function saveTasks() {
 }
 
 function renderTasks() {
+  emptyMessage.style.display = tarefas.length === 0 ? 'block' : 'none';
+
   const pendentes = tarefas.filter(t => !t.concluida).length;
   contador.textContent = pendentes;
 
