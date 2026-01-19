@@ -92,15 +92,15 @@ li.appendChild(spanText);
       if (!confirmar) return;
       
       tasks = tasks.filter(t => t !== task);
-      //li.classList.add('removing');
+      li.classList.add('removing');
 
-      //setTimeout(() => {
-      //tarefas.splice(index, 1);
-      //saveTasks();
-      //renderTasks();
-      //}, 300);
+      setTimeout(() => {
+      tarefas.splice(index, 1);
       saveTasks();
       renderTasks();
+      }, 300);
+      //saveTasks();
+      //renderTasks();
     });
 
     li.appendChild(removeBtn);
