@@ -74,7 +74,7 @@ function renderTasks() {
       });
     });
 
-    // Botão remover tarefa
+    // Botão remover tarefa com animação
     const removeBtn = document.createElement("button");
     removeBtn.textContent = "❌";
     removeBtn.addEventListener("click", e => {
@@ -150,10 +150,6 @@ filterCompleted.addEventListener("click", () => {
   setActiveFilter(filterCompleted);
   renderTasks();
 });
-
-// Inicial
-renderTasks();
-
 
 // Inicial
 renderTasks();
