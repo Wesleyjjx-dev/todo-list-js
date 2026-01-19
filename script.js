@@ -3,15 +3,15 @@ const button = document.querySelector("#addBtn");
 const lista = document.querySelector("#taskList");
 const contador = document.querySelector("#contador");
 
-// Carrega tarefas do localStorage
+// Carregar tarefas
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-// Salva tarefas
+// Salvar tarefas
 function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-// Renderiza tarefas na tela
+// Renderizar tarefas
 function renderTasks() {
   lista.innerHTML = "";
 
@@ -23,7 +23,7 @@ function renderTasks() {
       li.classList.add("concluida");
     }
 
-    // Marcar / desmarcar como concluída
+    // Marcar como concluída
     li.addEventListener("click", () => {
       task.concluida = !task.concluida;
       saveTasks();
@@ -33,9 +33,10 @@ function renderTasks() {
     // Botão remover
     const btnRemove = document.createElement("button");
     btnRemove.textContent = "✖";
+    btnRemove.classList.add("remove");
 
     btnRemove.addEventListener("click", (e) => {
-      e.stopPropagation(); // evita marcar como concluída
+      e.stopPropagation();
       tasks.splice(index, 1);
       saveTasks();
       renderTasks();
@@ -45,17 +46,17 @@ function renderTasks() {
     lista.appendChild(li);
   });
 
-  // Atualiza contador
+  // Atualizar contador
   contador.textContent = tasks.filter(t => !t.concluida).length;
 }
 
-// Adiciona nova tarefa
+// Adicionar tarefa
 function addTask() {
   const texto = input.value.trim();
   if (texto === "") return;
 
   tasks.push({
-    texto: texto,
+    texto,
     concluida: false
   });
 
@@ -64,15 +65,14 @@ function addTask() {
   renderTasks();
 }
 
-// Clique no botão
+// Eventos
 button.addEventListener("click", addTask);
 
-// Enter no input
 input.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
     addTask();
   }
 });
 
-// Renderiza ao abrir a página
+// Inicial
 renderTasks();
