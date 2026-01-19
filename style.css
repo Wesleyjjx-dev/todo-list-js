@@ -26,10 +26,10 @@ body {
   margin: 0;
   background: var(--bg-color);
   color: var(--text-color);
-  transition: background 0.3s, color 0.3s;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: background 0.3s, color 0.3s;
 }
 
 .container {
@@ -107,16 +107,24 @@ li {
   padding: 8px;
   margin-bottom: 5px;
   cursor: pointer;
-  opacity: 0;
-  transform: translateY(-5px);
-  animation: fadeIn 0.3s ease forwards;
-  transition: all 0.3s ease; /* aqui garantimos a transição */
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.3s ease;
 }
 
 li.completed {
   text-decoration: line-through;
   color: #888;
-  transition: color 0.3s ease;
+}
+
+li.enter {
+  opacity: 0;
+  transform: translateX(-20px); /* entra da esquerda */
+}
+
+.removing {
+  opacity: 0;
+  transform: translateX(100%); /* sai para a direita */
 }
 
 li button {
@@ -125,7 +133,6 @@ li button {
   font-size: 16px;
   cursor: pointer;
   padding: 4px 6px;
-  line-height: 1;
 }
 
 li button:hover {
@@ -136,17 +143,4 @@ li button:hover {
   color: #666;
   font-style: italic;
   text-align: center;
-}
-
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.removing {
-  opacity: 0;
-  transform: translateX(100%) rotate(5deg); /* desliza para a direita + pequena rotação */
-  transition: all 0.3s ease; /* aplica transição para transform e opacity */
 }
