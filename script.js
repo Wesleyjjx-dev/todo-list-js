@@ -39,7 +39,31 @@ function renderTasks() {
       saveTasks();
       renderTasks();
     });
+    li.addEventListener("dblclick", () => {
+  const inputEdit = document.createElement("input");
+  inputEdit.type = "text";
+  inputEdit.value = task.text;
+  inputEdit.style.width = "90%";
 
+  li.innerHTML = "";
+  li.appendChild(inputEdit);
+  inputEdit.focus();
+
+  inputEdit.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      const novoTexto = inputEdit.value.trim();
+      if (novoTexto !== "") {
+        task.text = novoTexto;
+        saveTasks();
+        renderTasks();
+      }
+    }
+
+    if (e.key === "Escape") {
+      renderTasks();
+    }
+  });
+});
     const removeBtn = document.createElement("button");
     removeBtn.textContent = "❌";
 
