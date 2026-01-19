@@ -25,7 +25,7 @@ function renderTasks() {
       saveTasks();
       renderTasks();
     });
-
+  
     ul.appendChild(li);
   });
 }
@@ -39,7 +39,11 @@ button.addEventListener("click", () => {
   saveTasks();
   renderTasks();
 });
-
+input.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    button.click();
+  }
+});
 // render inicial
 renderTasks();
  
