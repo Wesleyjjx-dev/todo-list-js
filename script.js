@@ -1,109 +1,88 @@
-const input = document.querySelector("#taskInput");
-const button = document.querySelector("#addBtn");
-const lista = document.querySelector("#taskList");
-const contador = document.querySelector("#contador");
-const filtros = document.querySelectorAll(".filtros button");
+const taskInput = document.getElementById("taskInput");
+const addBtn = document.getElementById("addBtn");
+const taskList = document.getElementById("taskList");
+const contador = document.getElementById("contador");
 
-// Estado
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-let filtroAtual = "all";
+let filtroAtual = "todas"; // todas | pendentes | concluidas
 
-// Ativa "Todas" por padrão
-filtros[0].classList.add("ativo");
-
-// Salvar tarefas
 function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-// Renderizar tarefas
 function renderTasks() {
-  lista.innerHTML = "";
+  taskList.innerHTML = "";
 
-  // Filtragem
   let tarefasFiltradas = tasks;
 
   if (filtroAtual === "pendentes") {
-    tarefasFiltradas = tasks.filter(t => !t.concluida);
+    tarefasFiltradas = tasks.filter(t => !t.completed);
   }
 
   if (filtroAtual === "concluidas") {
-    tarefasFiltradas = tasks.filter(t => t.concluida);
+    tarefasFiltradas = tasks.filter(t => t.completed);
   }
 
   tarefasFiltradas.forEach((task, index) => {
     const li = document.createElement("li");
-    li.textContent = task.texto;
+    li.className = "task";
 
-    if (task.concluida) {
-      li.classList.add("concluida");
+    if (task.completed) {
+      li.classList.add("completed");
     }
 
-    // Marcar / desmarcar
+    li.textContent = task.text;
+
+    // clicar no texto marca/desmarca
     li.addEventListener("click", () => {
-      task.concluida = !task.concluida;
+      task.completed = !task.completed;
       saveTasks();
       renderTasks();
     });
 
-    // Botão remover
-    const btnRemove = document.createElement("button");
-    btnRemove.textContent = "✖";
-    btnRemove.classList.add("remove");
+    const removeBtn = document.createElement("button");
+    removeBtn.textContent = "❌";
 
-    btnRemove.addEventListener("click", (e) => {
-      e.stopPropagation();
-
-      const indexReal = tasks.indexOf(task);
-      tasks.splice(indexReal, 1);
-
+    removeBtn.addEventListener("click", (e) => {
+      e.stopPropagation(); // evita marcar como concluída
+      tasks.splice(index, 1);
       saveTasks();
       renderTasks();
     });
 
-    li.appendChild(btnRemove);
-    lista.appendChild(li);
+    li.appendChild(removeBtn);
+    taskList.appendChild(li);
   });
 
-  // Contador (pendentes)
-  contador.textContent = tasks.filter(t => !t.concluida).length;
+  atualizarContador();
 }
 
-// Adicionar tarefa
+function atualizarContador() {
+  const pendentes = tasks.filter(t => !t.completed).length;
+  contador.textContent = pendentes;
+}
+
 function addTask() {
-  const texto = input.value.trim();
+  const texto = taskInput.value.trim();
   if (texto === "") return;
 
   tasks.push({
-    texto,
-    concluida: false
+    text: texto,
+    completed: false
   });
 
-  input.value = "";
+  taskInput.value = "";
   saveTasks();
   renderTasks();
 }
 
-// Eventos
-button.addEventListener("click", addTask);
+addBtn.addEventListener("click", addTask);
 
-input.addEventListener("keypress", (e) => {
+taskInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     addTask();
   }
 });
 
-// Eventos dos filtros
-filtros.forEach(botao => {
-  botao.addEventListener("click", () => {
-    filtroAtual = botao.dataset.filter;
-
-    filtros.forEach(b => b.classList.remove("ativo"));
-    botao.classList.add("ativo");
-
-    renderTasks();
-  });
-});
-
-// Inicialização
+// inicial
 renderTasks();
