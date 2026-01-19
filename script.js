@@ -45,5 +45,36 @@ input.addEventListener("keypress", (e) => {
   }
 });
 // render inicial
-renderTasks();
+function renderTasks() {
+  ul.innerHTML = "";
+
+  tasks.forEach((task, index) => {
+    const li = document.createElement("li");
+    li.textContent = task.text;
+
+    if (task.done) {
+      li.style.textDecoration = "line-through";
+    }
+
+    li.addEventListener("click", () => {
+      tasks[index].done = !tasks[index].done;
+      saveTasks();
+      renderTasks();
+    });
+
+    const removeBtn = document.createElement("button");
+    removeBtn.textContent = "❌";
+    removeBtn.style.marginLeft = "10px";
+
+    removeBtn.addEventListener("click", (e) => {
+      e.stopPropagation(); // evita marcar como concluída
+      tasks.splice(index, 1);
+      saveTasks();
+      renderTasks();
+    });
+
+    li.appendChild(removeBtn);
+    ul.appendChild(li);
+  });
+}
  
