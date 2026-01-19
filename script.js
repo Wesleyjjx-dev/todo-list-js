@@ -15,6 +15,9 @@ function saveTasks() {
 }
 
 function renderTasks() {
+  const pendentes = tarefas.filter(t => !t.concluida).length;
+  contador.textContent = pendentes;
+
   taskList.innerHTML = "";
 
   let filteredTasks = [];
@@ -145,6 +148,13 @@ filterCompleted.addEventListener("click", () => {
   currentFilter = "completed";
   setActiveFilter(filterCompleted);
   renderTasks();
+});
+
+filtroBotoes.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filtroBotoes.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
 });
 
 // inicial
