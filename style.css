@@ -95,6 +95,12 @@ li.completed {
 li button {
   background: transparent;
   border: none;
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
+  padding: 4px 6px;
+  line-height: 1;
+}
+
+li button:hover {
+  color: red;
 }
