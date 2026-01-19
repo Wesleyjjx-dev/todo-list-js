@@ -68,7 +68,7 @@ function renderTasks() {
     removeBtn.style.marginLeft = "10px";
 
     removeBtn.addEventListener("click", (e) => {
-      e.stopPropagation(); // evita marcar como concluída
+      e.stopPropagation(); // MUITO IMPORTANTE
       tasks.splice(index, 1);
       saveTasks();
       renderTasks();
@@ -77,6 +77,7 @@ function renderTasks() {
     li.appendChild(removeBtn);
     ul.appendChild(li);
   });
+
   const pending = tasks.filter(task => !task.done).length;
   counter.textContent = `Tarefas pendentes: ${pending}`;
 }
