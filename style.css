@@ -104,3 +104,16 @@ li button {
 li button:hover {
   color: red;
 }
+
+.filter-btn {
+  padding: 6px 12px;
+  margin-right: 6px;
+  border: 1px solid #000;
+  background: #fff;
+  cursor: pointer;
+}
+
+.filter-btn.active {
+  background: #000;
+  color: #fff;
+}
