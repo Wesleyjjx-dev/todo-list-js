@@ -29,18 +29,22 @@ function renderTasks() {
 
   filteredTasks.forEach(task => {
     const li = document.createElement("li");
-    li.textContent = task.text;
 
-    if (task.completed) {
-      li.classList.add("completed");
-    }
+if (task.completed) {
+  li.classList.add("completed");
+}
 
-    // concluir tarefa
-    li.addEventListener("click", () => {
-      task.completed = !task.completed;
-      saveTasks();
-      renderTasks();
-    });
+const spanText = document.createElement("span");
+spanText.textContent = task.text;
+
+// clicar SOMENTE no texto
+spanText.addEventListener("click", () => {
+  task.completed = !task.completed;
+  saveTasks();
+  renderTasks();
+});
+
+li.appendChild(spanText);
 
     // editar tarefa
     li.addEventListener("dblclick", () => {
