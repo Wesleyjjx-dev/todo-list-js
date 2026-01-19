@@ -1,28 +1,23 @@
-const input = document.getElementById("taskInput");
-const button = document.getElementById("addBtn");
-const list = document.getElementById("taskList");
+const input = document.querySelector("input");
+const button = document.querySelector("button");
+const ul = document.querySelector("ul");
 
-// carrega tarefas salvas
-function loadTasks() {
-  const saved = localStorage.getItem("tasks");
-  return saved ? JSON.parse(saved) : [];
-}
-
-let tasks = loadTasks();
+// carregar tarefas salvas
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
 function renderTasks() {
-  list.innerHTML = "";
+  ul.innerHTML = "";
 
   tasks.forEach((task, index) => {
     const li = document.createElement("li");
     li.textContent = task.text;
 
     if (task.done) {
-      li.classList.add("done");
+      li.style.textDecoration = "line-through";
     }
 
     li.addEventListener("click", () => {
@@ -31,27 +26,20 @@ function renderTasks() {
       renderTasks();
     });
 
-    list.appendChild(li);
+    ul.appendChild(li);
   });
 }
 
-function addTask() {
-  const text = input.value.trim();
-  if (!text) return;
+button.addEventListener("click", () => {
+  if (input.value.trim() === "") return;
 
-  tasks.push({ text, done: false });
+  tasks.push({ text: input.value, done: false });
+  input.value = "";
+
   saveTasks();
   renderTasks();
-  input.value = "";
-}
-
-button.addEventListener("click", addTask);
-
-input.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    addTask();
-  }
 });
 
-// renderiza ao abrir
+// render inicial
 renderTasks();
+ 
