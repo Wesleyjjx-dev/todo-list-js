@@ -79,9 +79,16 @@ function renderTasks() {
     removeBtn.textContent = "❌";
     removeBtn.addEventListener("click", e => {
       e.stopPropagation();
-      tasks = tasks.filter(t => t !== task);
-      saveTasks();
-      renderTasks();
+
+      const confirmar = confirm(`Deseja remover a tarefa:\n"${task.text}" ?`);
+      if(!confirmar) return;
+
+      li.classList.add("removing"); // aplica animação
+      setTimeout(() => {
+        tasks = tasks.filter(t => t !== task);
+        saveTasks();
+        renderTasks();
+      }, 300); // espera animação terminar antes de remover
     });
     li.appendChild(removeBtn);
 
