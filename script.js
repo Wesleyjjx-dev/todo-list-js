@@ -15,6 +15,13 @@ function saveTasks() {
 }
 
 function renderTasks() {
+        const savedTheme = localStorage.getItem('theme');
+
+        if (savedTheme === 'dark') {
+        document.body.classList.add('dark');
+        themeToggle.textContent = '☀️ Modo claro';
+      }
+
   emptyMessage.style.display = tarefas.length === 0 ? 'block' : 'none';
 
   const pendentes = tarefas.filter(t => !t.concluida).length;
@@ -50,6 +57,15 @@ spanText.addEventListener("click", () => {
 });
 
 li.appendChild(spanText);
+
+            themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+
+            const isDark = document.body.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+
+            themeToggle.textContent = isDark ? '☀️ Modo claro' : '🌙 Modo escuro';
+        });
 
     // editar tarefa
     li.addEventListener("dblclick", () => {
