@@ -1,9 +1,9 @@
-const counter = document.getElementById("counter");
 const input = document.querySelector("input");
 const button = document.querySelector("button");
 const ul = document.querySelector("ul");
+const counter = document.getElementById("counter");
 
-// carregar tarefas salvas
+// ⚠️ DECLARADO UMA ÚNICA VEZ
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 function saveTasks() {
@@ -26,49 +26,13 @@ function renderTasks() {
       saveTasks();
       renderTasks();
     });
-  
-    ul.appendChild(li);
-  });
-}
-
-button.addEventListener("click", () => {
-  if (input.value.trim() === "") return;
-
-  tasks.push({ text: input.value, done: false });
-  input.value = "";
-
-  saveTasks();
-  renderTasks();
-});
-input.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") {
-    button.click();
-  }
-});
-// render inicial
-function renderTasks() {
-  ul.innerHTML = "";
-
-  tasks.forEach((task, index) => {
-    const li = document.createElement("li");
-    li.textContent = task.text;
-
-    if (task.done) {
-      li.style.textDecoration = "line-through";
-    }
-
-    li.addEventListener("click", () => {
-      tasks[index].done = !tasks[index].done;
-      saveTasks();
-      renderTasks();
-    });
 
     const removeBtn = document.createElement("button");
     removeBtn.textContent = "❌";
     removeBtn.style.marginLeft = "10px";
 
     removeBtn.addEventListener("click", (e) => {
-      e.stopPropagation(); // MUITO IMPORTANTE
+      e.stopPropagation();
       tasks.splice(index, 1);
       saveTasks();
       renderTasks();
@@ -81,4 +45,21 @@ function renderTasks() {
   const pending = tasks.filter(task => !task.done).length;
   counter.textContent = `Tarefas pendentes: ${pending}`;
 }
- 
+
+button.addEventListener("click", () => {
+  if (input.value.trim() === "") return;
+
+  tasks.push({ text: input.value, done: false });
+  input.value = "";
+  saveTasks();
+  renderTasks();
+});
+
+input.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    button.click();
+  }
+});
+
+// ✅ render APENAS UMA VEZ no carregamento
+renderTasks();
