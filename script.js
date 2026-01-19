@@ -77,5 +77,7 @@ function renderTasks() {
     li.appendChild(removeBtn);
     ul.appendChild(li);
   });
+  const pending = tasks.filter(task => !task.done).length;
+  counter.textContent = `Tarefas pendentes: ${pending}`;
 }
  
