@@ -2,72 +2,55 @@ const taskInput = document.getElementById("taskInput");
 const addBtn = document.getElementById("addBtn");
 const taskList = document.getElementById("taskList");
 const contador = document.getElementById("contador");
-const themeToggle = document.getElementById('themeToggle');
+const themeToggle = document.getElementById("themeToggle");
 const filterAll = document.getElementById("filterAll");
 const filterPending = document.getElementById("filterPending");
 const filterCompleted = document.getElementById("filterCompleted");
+const emptyMessage = document.getElementById("emptyMessage");
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 let currentFilter = "all"; // all | pending | completed
 
+// Salvar tarefas no localStorage
 function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
+// Renderizar tarefas
 function renderTasks() {
-        const savedTheme = localStorage.getItem('theme');
+  // Mostrar/ocultar mensagem de lista vazia
+  emptyMessage.style.display = tasks.length === 0 ? "block" : "none";
 
-        if (savedTheme === 'dark') {
-        document.body.classList.add('dark');
-        themeToggle.textContent = '☀️ Modo claro';
-      }
-
-  emptyMessage.style.display = tarefas.length === 0 ? 'block' : 'none';
-
-  const pendentes = tarefas.filter(t => !t.concluida).length;
+  // Contador de tarefas pendentes
+  const pendentes = tasks.filter(t => !t.completed).length;
   contador.textContent = pendentes;
 
   taskList.innerHTML = "";
 
+  // Filtrar tarefas
   let filteredTasks = [];
-
-  if (currentFilter === "all") {
-    filteredTasks = tasks;
-  } else if (currentFilter === "pending") {
+  if (currentFilter === "all") filteredTasks = tasks;
+  else if (currentFilter === "pending")
     filteredTasks = tasks.filter(t => !t.completed);
-  } else {
-    filteredTasks = tasks.filter(t => t.completed);
-  }
+  else filteredTasks = tasks.filter(t => t.completed);
 
-  filteredTasks.forEach(task => {
+  filteredTasks.forEach((task) => {
     const li = document.createElement("li");
+    if (task.completed) li.classList.add("completed");
 
-if (task.completed) {
-  li.classList.add("completed");
-}
+    const spanText = document.createElement("span");
+    spanText.textContent = task.text;
 
-const spanText = document.createElement("span");
-spanText.textContent = task.text;
+    // Marcar/desmarcar tarefa clicando no texto
+    spanText.addEventListener("click", () => {
+      task.completed = !task.completed;
+      saveTasks();
+      renderTasks();
+    });
 
-// clicar SOMENTE no texto
-spanText.addEventListener("click", () => {
-  task.completed = !task.completed;
-  saveTasks();
-  renderTasks();
-});
+    li.appendChild(spanText);
 
-li.appendChild(spanText);
-
-            themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark');
-
-            const isDark = document.body.classList.contains('dark');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-
-            themeToggle.textContent = isDark ? '☀️ Modo claro' : '🌙 Modo escuro';
-        });
-
-    // editar tarefa
+    // Editar tarefa com duplo clique
     li.addEventListener("dblclick", () => {
       const inputEdit = document.createElement("input");
       inputEdit.type = "text";
@@ -87,71 +70,63 @@ li.appendChild(spanText);
             renderTasks();
           }
         }
-
-        if (e.key === "Escape") {
-          renderTasks();
-        }
+        if (e.key === "Escape") renderTasks();
       });
     });
 
-    // remover tarefa
+    // Botão remover tarefa
     const removeBtn = document.createElement("button");
     removeBtn.textContent = "❌";
-
     removeBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-
-      const confirmar = confirm(
-        `Deseja remover a tarefa:\n"${task.text}" ?`
-      );
-
+      const confirmar = confirm(`Deseja remover a tarefa:\n"${task.text}" ?`);
       if (!confirmar) return;
-      
-      tasks = tasks.filter(t => t !== task);
-      li.classList.add('removing');
 
-      setTimeout(() => {
-      tarefas.splice(index, 1);
+      tasks = tasks.filter((t) => t !== task);
       saveTasks();
       renderTasks();
-      }, 300);
-      //saveTasks();
-      //renderTasks();
     });
 
     li.appendChild(removeBtn);
     taskList.appendChild(li);
   });
-
-  contador.textContent = filteredTasks.length;
 }
 
+// Adicionar nova tarefa
 function addTask() {
   const texto = taskInput.value.trim();
   if (texto === "") return;
 
-  tasks.push({
-    text: texto,
-    completed: false
-  });
-
+  tasks.push({ text: texto, completed: false });
   taskInput.value = "";
   saveTasks();
   renderTasks();
 }
 
-// eventos
+// Eventos
 addBtn.addEventListener("click", addTask);
-
 taskInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    addTask();
-  }
+  if (e.key === "Enter") addTask();
 });
 
-// filtros
+// Tema claro/escuro
+themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+  const isDark = document.body.classList.contains("dark");
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+  themeToggle.textContent = isDark ? "☀️ Modo claro" : "🌙 Modo escuro";
+});
+
+// Restaurar tema salvo
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme === "dark") {
+  document.body.classList.add("dark");
+  themeToggle.textContent = "☀️ Modo claro";
+}
+
+// Filtros
 function setActiveFilter(botao) {
-  document.querySelectorAll(".filter-btn").forEach(btn =>
+  document.querySelectorAll(".filter-btn").forEach((btn) =>
     btn.classList.remove("active")
   );
   botao.classList.add("active");
@@ -162,25 +137,16 @@ filterAll.addEventListener("click", () => {
   setActiveFilter(filterAll);
   renderTasks();
 });
-
 filterPending.addEventListener("click", () => {
   currentFilter = "pending";
   setActiveFilter(filterPending);
   renderTasks();
 });
-
 filterCompleted.addEventListener("click", () => {
   currentFilter = "completed";
   setActiveFilter(filterCompleted);
   renderTasks();
 });
 
-filtroBotoes.forEach(btn => {
-  btn.addEventListener('click', () => {
-    filtroBotoes.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-  });
-});
-
-// inicial
+// Inicial
 renderTasks();
